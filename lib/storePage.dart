@@ -55,13 +55,34 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Store store;
-  int currentIndex = 0;
+  int currentIndex = 1;
+  final TextEditingController _filter = new TextEditingController();
+  String _searchText = "";
+  Icon _searchIcon = Icon(Icons.search);
+  Widget _searchBar;
+  List names = new List(); // names we get from API
+  List filteredNames = new List();
+
   PageController pageController = PageController(
-    initialPage: 0,
+    initialPage: 1,
     keepPage: true,
   );
 
-  _MyHomePageState({this.store});
+  _MyHomePageState({this.store}){
+    _searchBar = new Text(this.store.name);
+    _filter.addListener(() {
+      if (_filter.text.isEmpty) {
+        setState(() {
+          _searchText = "";
+          //filteredNames = logic.availablePokemon;
+        });
+      } else {
+        setState(() {
+          _searchText = _filter.text;
+        });
+      }
+    });
+  }
 
   void _openCartMenu() {
     setState(() {});
@@ -71,17 +92,86 @@ class _MyHomePageState extends State<MyHomePage> {
     runApp(LocationRegister());
   }
 
+  
+  _searchPressed() {
+    setState(() {
+      if (this._searchIcon.icon == Icons.search) {
+        pageController.jumpToPage(0);
+        currentIndex = 0;
+        this._searchIcon = new Icon(Icons.close);
+        this._searchBar = new TextField(
+          autofocus: true,
+          controller: _filter,
+          decoration: new InputDecoration(
+              prefixIcon: new Icon(Icons.search),
+              hintText: 'Start typing'
+          ),
+        );
+      } else {
+        pageController.jumpToPage(1);
+        currentIndex = 1;
+        this._searchIcon = new Icon(Icons.search);
+        this._searchBar = new Text(this.store.name, textAlign: TextAlign.right,);
+        filteredNames = names;
+        _filter.clear();
+      }
+    });
+  }
+  
+
+  @override
+  Container search (BuildContext context) {
+    return 
+        Container(child: _buildList());
+  }
+
+  _closeSearch(String item){
+    setState(() {
+      this._searchIcon = new Icon(Icons.location_searching);
+      this._searchBar = new Text(item, textAlign: TextAlign.right,); // TODO: Add alert dialog to determine if pokemon was caught.
+      filteredNames = names;
+      _filter.clear();
+    });
+  }
+
+
+  Widget _buildList() {
+    if (!(_searchText.isEmpty)) {
+      List<String> tempList = [];
+      for (int i = 0; i < this.store.aisles.length; i++) {
+        if (this.store.aisles[i].toLowerCase().contains(
+            _searchText.toLowerCase())) {
+          tempList.add(this.store.aisles[i]);
+        }
+      }
+      filteredNames = tempList;
+    }
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: filteredNames.length,
+      itemBuilder: (BuildContext context, int index) {
+        return new ListTile(
+          title: Text(filteredNames[index], textAlign: TextAlign.center,),
+          onTap: ()=>_closeSearch(filteredNames[index]),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(this.store.name),
+          title: _searchBar,
           leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               onPressed: _returnToSetLocation),
-          actions: <Widget>[
+          actions: <Widget>[IconButton(
+              icon: _searchIcon, onPressed: _searchPressed
+          ),
             IconButton(
-                icon: Icon(Icons.shopping_cart), onPressed: _openCartMenu),
+                icon: Icon(Icons.shopping_cart), onPressed: _openCartMenu
+            ),
           ],
         ),
         bottomNavigationBar: new Theme(
@@ -97,6 +187,11 @@ class _MyHomePageState extends State<MyHomePage> {
             onTap: _pageChanged,
             items: [
               BottomNavigationBarItem(
+                  icon: Icon(Icons.search),
+                  title: Text(
+                    "Search",
+                  )),
+              BottomNavigationBarItem(
                   icon: Icon(Icons.home),
                   title: Text(
                     "Home",
@@ -105,11 +200,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   icon: Icon(Icons.list),
                   title: Text(
                     "Aisles",
-                  )),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  title: Text(
-                    "Profile",
                   )),
             ],
             currentIndex: currentIndex,
@@ -120,13 +210,17 @@ class _MyHomePageState extends State<MyHomePage> {
             onPageChanged: (index) {
               _pageChanged(index);
             },
-            children: [page1(), page2()]));
+            children: [_buildList(),page1(), page2()]));
   }
 
   void _pageChanged(int index) {
     setState(() {
       currentIndex = index;
       pageController.jumpToPage(index);
+      this._searchIcon = new Icon(Icons.search);
+      this._searchBar = new Text(this.store.name, textAlign: TextAlign.right,);
+      filteredNames = names;
+      _filter.clear();
     });
   }
 
