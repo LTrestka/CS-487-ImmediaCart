@@ -3,6 +3,7 @@ import 'package:immediacart/giveLocation.dart';
 import 'package:immediacart/main.dart';
 import 'package:immediacart/phoneRegister.dart';
 import 'package:immediacart/register.dart';
+import 'package:immediacart/storePage.dart';
 
 
 
@@ -123,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ListTile(
       leading: Text(s.name + "-" + s.address, style: TextStyle(fontSize: 18, color: Colors.white)),
       trailing: Icon(Icons.chevron_right),
-      onTap: (){print("Kurwa");},
+      onTap: (){runApp(StorePage(store: s));},
     ));
     list.add(store);
     list.add(Divider(height: 2.0,));
@@ -132,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ListTile(
       leading: Text(s2.name + "-" + s2.address, style: TextStyle(fontSize: 18, color: Colors.white)),
       trailing: Icon(Icons.chevron_right),
-      onTap: (){},
+          onTap: (){runApp(StorePage(store: s2));},
     ));
     list.add(store2);
     list.add(Divider(height: 2.0,));
@@ -141,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ListTile(
       leading: Text(s3.name + "-" + s3.address, style: TextStyle(fontSize: 18, color: Colors.white),),
       trailing: Icon(Icons.chevron_right),
-      onTap: (){},
+          onTap: (){runApp(StorePage(store: s3));},
     ));
     list.add(store3);
     list.add(Divider(height: 2.0,));
@@ -150,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ListTile(
       leading: Text(s4.name + "-" + s4.address, style: TextStyle(fontSize: 18, color: Colors.white)),
       trailing: Icon(Icons.chevron_right),
-      onTap: (){},
+          onTap: (){runApp(StorePage(store: s4));},
     ));
     list.add(store4);
 
