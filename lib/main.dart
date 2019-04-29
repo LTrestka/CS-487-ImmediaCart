@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:immediacart/User.dart';
+import 'package:immediacart/giveLocation.dart';
 import 'package:immediacart/register.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(Main());
 
-class MyApp extends StatelessWidget {
+class Main extends StatelessWidget {
+  User user;
+  Main({this.user});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -13,34 +17,44 @@ class MyApp extends StatelessWidget {
 
         primarySwatch: Colors.green,
       ),
-      home: MyHomePage(title: 'ImmediaCart'),
+      home: MyHomePage(title: 'ImmediaCart', user: this.user),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  User user;
+  MyHomePage({Key key, this.title, this.user}) : super(key: key);
 
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState(user:this.user);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  User user;
   TextEditingController _usernameText = new TextEditingController();
   TextEditingController _passwordText = new TextEditingController();
 
   void _openTopRightMenu() {
-    setState(() {});
+    setState(() {
+      this._usernameText.text = "LTrestka";
+      this._passwordText.text = "password";
+    });
   }
+
+  _MyHomePageState({this.user});
 
   void _signIn() {
     setState(() {
-      //_usernameText.text = "Hello, This is where";
-      //_passwordText.text =  "Your login function would run";
+      if(_usernameText.text == "LTrestka"){
+        if(_passwordText.text == "password"){
+          runApp(LocationRegister());
+        }
+      }
     });
   }
 

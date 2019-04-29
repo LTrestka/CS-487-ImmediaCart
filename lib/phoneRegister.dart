@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:immediacart/User.dart';
 import 'package:immediacart/giveLocation.dart';
+import 'package:immediacart/main.dart';
 import 'package:immediacart/register.dart';
 
 
@@ -53,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
       this.user.addPhoneNumber(_phoneText.text);
       // TODO: Send this information to firebase to generate new user, text phone with username and password
 
-      runApp(LocationRegister());
+      runApp(Main(user:this.user));
     });
   }
 

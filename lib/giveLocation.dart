@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:immediacart/User.dart';
 import 'package:immediacart/main.dart';
 import 'package:immediacart/phoneRegister.dart';
 import 'package:immediacart/register.dart';
@@ -7,6 +8,7 @@ import 'package:immediacart/selectStore.dart';
 void main() => runApp(LocationRegister());
 
 class LocationRegister extends StatelessWidget {
+  User user;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -24,13 +26,14 @@ class LocationRegister extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.green,
       ),
-      home: MyHomePage(title: 'ImmediaCart'),
+      home: MyHomePage(title: 'ImmediaCart', user: this.user,),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  User user;
+  MyHomePage({Key key, this.title, this.user}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -48,17 +51,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  User user;
 
   TextEditingController _emailText = new TextEditingController();
-  TextEditingController _passwordText = new TextEditingController();
+  TextEditingController _locationText = new TextEditingController();
 
+  _MyHomePageState({this.user});
 
   void _openTopRightMenu() {
-    setState(() {});
+    setState(() {
+      this._locationText.text = "3105 South Dearborn St. Chicago, IL 60616";
+    });
   }
 
   void _returnToRegister() {
-    runApp(PhoneRegister());
+    runApp(Main(user: this.user));
   }
 
   void _continueClicked() {
@@ -122,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   decoration: InputDecoration(
                       labelText: "Current Location", filled: true),
                   autofocus: true,
-                  controller: _passwordText,
+                  controller: _locationText,
                 )),
             Divider(
               height: 10.0,

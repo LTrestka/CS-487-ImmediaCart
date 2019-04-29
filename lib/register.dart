@@ -84,7 +84,7 @@ class _MyHomePageState extends State<RegisterPage> {
   }
 
   void _returnToLogin(){
-    runApp(MyApp());
+    runApp(Main());
   }
 
 

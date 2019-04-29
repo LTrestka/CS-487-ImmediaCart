@@ -9,6 +9,9 @@ import 'package:immediacart/storePage.dart';
 
 class SelectStore extends StatelessWidget {
   // This widget is the root of your application.
+  Store store;
+  SelectStore({this.store});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,13 +28,15 @@ class SelectStore extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.green,
       ),
-      home: MyHomePage(title: 'ImmediaCart'),
+      home: MyHomePage(title: 'ImmediaCart', store: this.store),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  Store store;
+
+  MyHomePage({Key key, this.title, this.store}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -45,10 +50,13 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState(store: this.store);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  Store store;
+  _MyHomePageState({this.store});
 
 
   void _openCartMenu() {
@@ -164,10 +172,43 @@ class Store{
   String name;
   String address;
   List<String> aisles;
+  List<Item> items = [];
+  List<Item> cart = [];
 
   Store(this.name, this.address){
-    this.aisles = ["Babe Care", "Beverages", "Bread and Bakery", "Breakfast and Cereal",
-    "Canned Goods and Soups", "Condiments and Spices", "Dairy, Eggs, and Cheese",
-    "Deli", "Flowers and Decor", "Frozen Foods", "Fruits and Vegetables", "Grains and Pastas"];
+    this.aisles = ["Baby Care", "Beverages", "Bread and Bakery", "Breakfast and Cereal",
+    "Canned Goods and Soups", "Condiments and Spices", "Cooking Oils", "Dairy, Eggs, and Cheese",
+    "Deli", "Flowers and Decor", "Frozen Foods", "Fruits and Vegetables", "Grains and Pastas", "Home Needs"];
   }
+
+  // TODO: see if ishan or jordan want to make a bunch of data entries for this
+
+}
+
+
+class Item{
+  int listItem;
+  String name;
+  double weight;
+  double price;
+  int quantity;
+  String aisle;
+  String ingredients;
+  String details;
+  String more;
+
+  Item(this.listItem, this.name, this.weight, this.price, this.aisle, this.ingredients, this.details,
+      this.more){
+    quantity = 0;
+  }
+
+  void addToCart(){
+    this.quantity++;
+  }
+  void removeFromCart() {
+    if(this.quantity >0){
+      this.quantity--;
+    }
+  }
+
 }
